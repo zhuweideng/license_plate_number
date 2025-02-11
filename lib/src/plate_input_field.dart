@@ -213,7 +213,9 @@ class _PlateInputFieldState extends State<PlateInputField>
 
 /// 键盘控制器
 class KeyboardController {
-  KeyboardController();
+  KeyboardController() {
+    isKeyboardShowingNotifier = ValueNotifier<bool>(_isKeyboardShowing);
+  }
 
   /// 车牌号码数组
   final List<String> _plateNumbers = ['', '', '', '', '', '', '', ''];
@@ -236,6 +238,7 @@ class KeyboardController {
   /// 主题
   PlateStyles _styles = PlateStyles.light;
   late ValueNotifier<String> _valueNotifier;
+  late ValueNotifier<bool> isKeyboardShowingNotifier;
   Function(int index, String value)? _onPlateNumberChanged;
   void Function(List<String> array, String value)? _onCompleted;
 
@@ -288,6 +291,7 @@ class KeyboardController {
     if (!_isKeyboardShowing) {
       _controller!.forward();
       _isKeyboardShowing = true;
+      isKeyboardShowingNotifier.value = true;
     }
   }
 
@@ -297,6 +301,7 @@ class KeyboardController {
       _controller!.reverse();
     }
     _isKeyboardShowing = false;
+    isKeyboardShowingNotifier.value = false;
   }
 
   /// 键盘是否可见
@@ -310,5 +315,6 @@ class KeyboardController {
       _keyboardOverlay!.remove();
       _keyboardOverlay = null;
     }
+    isKeyboardShowingNotifier.dispose();
   }
 }
